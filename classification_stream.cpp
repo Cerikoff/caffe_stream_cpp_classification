@@ -256,13 +256,18 @@ int main(int argc, char** argv) {
   IplImage* frame=0;
 
   cvNamedWindow("capture", CV_WINDOW_AUTOSIZE);
+  
+  CvPoint pt = cvPoint( 0, 0 );
+  CvFont font;
+  cvInitFont( &font, CV_FONT_HERSHEY_COMPLEX,0.5, 0.5, 0, 1, CV_AA);
+
+  char buff[256];
 
   while(true)	
   {
     frame = cvQueryFrame( capture );
 
-    // показываем
-    cvShowImage("capture", frame);
+    
         
     char c = cvWaitKey(33);
     if (c == 27)  /*ESC*/
@@ -277,8 +282,17 @@ int main(int argc, char** argv) {
       Prediction p = predictions[i];
       std::cout << std::fixed << std::setprecision(4) << p.second << " - \""
               << p.first << "\"" << std::endl;
+      pt = cvPoint( 10, i*20 + 20 );
+      
+      strcpy(buff, p.first.c_str() );
+      
+      cvPutText(frame, buff, pt, &font, CV_RGB(150, 0, 0));        
+      
     }
     std::cout << "\n\n\n" << std::endl;
+    
+    // показываем
+    cvShowImage("capture", frame);
     
   }
   
